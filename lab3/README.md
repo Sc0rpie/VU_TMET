@@ -1,4 +1,4 @@
-Darbą atliko Hubertas Vindžigalskis ir Olenas Račkauskas
+Darbą atliko Hubertas Vindžigalskis ir Olen Račkauskas
 
 # Paleidimas
 
