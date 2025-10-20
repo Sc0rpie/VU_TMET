@@ -40,6 +40,8 @@ def parse_properties(path):
         if not line or line.startswith("#"):
             continue
 
+        line = evaluate_key_arithmetic(line)
+
         if "=" not in line:
             err(ln, f"Expected key=value, found: {line}")
             continue
@@ -47,6 +49,7 @@ def parse_properties(path):
         key, value = line.split("=", 1)
         key = key.strip()
         value = value.strip()
+        value = evaluate_arithmetic_value(value)
 
         if key in seen_keys and not key.startswith("exclusion."):
             # Exact duplicate key (exclusions allow multiple .i entries)
@@ -189,6 +192,40 @@ def parse_properties(path):
             warn(fc["line"], f"fontcharset.{fam}.{idx} has no matching FontDefinition; it will be ignored")
 
     return font_defs, fontcharset, exclusions, globals_, errors, warnings
+
+
+def evaluate_key_arithmetic(text):
+    def eval_match(match):
+        expr = match.group(1)
+        try:
+            result = eval(expr, {"__builtins__": {}}, {})
+            if isinstance(result, (int, float)):
+                return str(int(result) if result == int(result) else result)
+            return match.group(0)
+        except:
+            return match.group(0)
+
+    pattern = r"\(([0-9+\-*/.()\s]+)\)"
+    return re.sub(pattern, eval_match, text)
+
+
+def evaluate_arithmetic_value(value):
+    # Check if value looks like an arithmetic expression
+    if not re.search(r"[+\-*/]", value):
+        return value
+
+    # Check if it only contains numbers, operators, spaces, parentheses, and dots (for decimals)
+    if not re.match(r"^[0-9+\-*/.()\s]+$", value.strip()):
+        return value
+
+    try:
+        result = eval(value.strip(), {"__builtins__": {}}, {})
+        if isinstance(result, (int, float)):
+            return str(int(result) if result == int(result) else result)
+    except:
+        pass
+
+    return value
 
 
 def build_normalized(font_defs, fontcharset, exclusions, globals_):
