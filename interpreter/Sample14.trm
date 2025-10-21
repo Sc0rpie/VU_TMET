@@ -6,8 +6,7 @@
 
 dialog.0=Arial,ANSI_CHARSET
 dialog.1=WingDings,SYMBOL_CHARSET,NEED_CONVERTED
-dialog.2=Symbol,SYMBOL_CHARSET,NEED_CONVERTED
-# dialog.(0+3)=Arial,ANSI_CHARSET
+dialog.(1+1)=Symbol,SYMBOL_CHARSET,NEED_CONVERTED
 
 dialoginput.0=Courier New,ANSI_CHARSET
 dialoginput.1=WingDings,SYMBOL_CHARSET,NEED_CONVERTED
@@ -61,7 +60,7 @@ fontcharset.monospaced.2=sun.awt.CharToByteSymbol
 
 # Exclusion Range info.
 #
-exclusion.dialog.0=0100-ffff
+exclusion.dialog.0=0101-ffff
 
 exclusion.dialoginput.0=0100-ffff
 
